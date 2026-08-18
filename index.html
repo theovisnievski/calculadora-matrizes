@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora de Matrizes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <button id="tema-toggle" class="tema-toggle" type="button" aria-label="Ativar modo escuro">🌙</button>
+      <h1>Calculadora de Matrizes</h1>
+      <p class="subtitle">Soma, subtração, multiplicação, divisão e determinante — sem precisar fazer na mão.</p>
+    </header>
+
+    <main>
+      <section class="professor-card">
+        <div class="professor-math-bg" aria-hidden="true">
+          <span class="mx m1">π</span>
+          <span class="mx m2">∑</span>
+          <span class="mx m3">√</span>
+          <span class="mx m4">∫</span>
+          <span class="mx m5">×</span>
+          <span class="mx m6">÷</span>
+          <span class="mx m7">[ ]</span>
+          <span class="mx m8">x²</span>
+        </div>
+        <img src="img/olavo.png" alt="Foto do professor Olavo" class="professor-foto">
+        <div class="professor-info">
+          <p class="professor-label">Criado para</p>
+          <h2 class="professor-nome">Prof. Olavo</h2>
+          <span class="professor-apelido">Oladica's</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Operação</h2>
+
+        <div class="field">
+          <label for="operacao">Operação</label>
+          <select id="operacao">
+            <option value="determinante" selected>Determinante</option>
+            <option value="soma">Soma (A + B)</option>
+            <option value="subtracao">Subtração (A − B)</option>
+            <option value="multiplicacao">Multiplicação</option>
+            <option value="divisao">Divisão</option>
+          </select>
+        </div>
+
+        <div class="field" id="modo-operando-field" hidden>
+          <label>Multiplicar/dividir por</label>
+          <div class="toggle-group" id="modo-operando">
+            <button type="button" class="toggle-btn active" data-modo="matriz">Outra matriz</button>
+            <button type="button" class="toggle-btn" data-modo="escalar">Um número (escalar)</button>
+          </div>
+        </div>
+
+        <div class="field" id="escalar-field" hidden>
+          <label for="escalar" id="escalar-label">Escalar</label>
+          <input type="number" id="escalar" value="2" step="any">
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Matriz A</h2>
+
+        <div class="steppers-row">
+          <div class="stepper" id="a-linhas-stepper">
+            <span class="stepper-label" id="a-linhas-label">Linhas</span>
+            <div class="stepper-controls">
+              <button type="button" class="stepper-btn" data-stepper="a-linhas" data-delta="-1" aria-label="Diminuir linhas">−</button>
+              <span class="stepper-value" id="a-linhas-valor">3</span>
+              <button type="button" class="stepper-btn" data-stepper="a-linhas" data-delta="1" aria-label="Aumentar linhas">+</button>
+            </div>
+          </div>
+          <div class="stepper" id="a-colunas-stepper">
+            <span class="stepper-label">Colunas</span>
+            <div class="stepper-controls">
+              <button type="button" class="stepper-btn" data-stepper="a-colunas" data-delta="-1" aria-label="Diminuir colunas">−</button>
+              <span class="stepper-value" id="a-colunas-valor">3</span>
+              <button type="button" class="stepper-btn" data-stepper="a-colunas" data-delta="1" aria-label="Aumentar colunas">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="matriz-wrap">
+          <div class="matriz-bracket matriz-bracket-left" aria-hidden="true"></div>
+          <div id="matriz-a" class="matriz-grid"></div>
+          <div class="matriz-bracket matriz-bracket-right" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <section class="card" id="matriz-b-bloco" hidden>
+        <h2 class="card-title">Matriz B</h2>
+
+        <div class="steppers-row">
+          <div class="stepper">
+            <span class="stepper-label">Linhas</span>
+            <div class="stepper-controls">
+              <button type="button" class="stepper-btn" data-stepper="b-linhas" data-delta="-1" aria-label="Diminuir linhas">−</button>
+              <span class="stepper-value" id="b-linhas-valor">3</span>
+              <button type="button" class="stepper-btn" data-stepper="b-linhas" data-delta="1" aria-label="Aumentar linhas">+</button>
+            </div>
+          </div>
+          <div class="stepper">
+            <span class="stepper-label">Colunas</span>
+            <div class="stepper-controls">
+              <button type="button" class="stepper-btn" data-stepper="b-colunas" data-delta="-1" aria-label="Diminuir colunas">−</button>
+              <span class="stepper-value" id="b-colunas-valor">3</span>
+              <button type="button" class="stepper-btn" data-stepper="b-colunas" data-delta="1" aria-label="Aumentar colunas">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="matriz-wrap">
+          <div class="matriz-bracket matriz-bracket-left" aria-hidden="true"></div>
+          <div id="matriz-b" class="matriz-grid"></div>
+          <div class="matriz-bracket matriz-bracket-right" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <button id="calcular-btn" class="btn btn-primary">Calcular</button>
+
+      <section class="card resultado-card" id="resultado-section" hidden>
+        <h2 class="card-title">Resultado</h2>
+        <div id="resultado-conteudo"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Feito para facilitar a correção e a preparação de exercícios com matrizes.</p>
+      <p class="credito">Feito pelo aluno Théo Furtado do COC de Itajaí.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
