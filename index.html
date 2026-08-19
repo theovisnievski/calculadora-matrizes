@@ -7,7 +7,34 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
+  <div id="intro-screen" class="intro-screen">
+    <div class="intro-math-bg" aria-hidden="true">
+      <span class="mx im1">∑</span>
+      <span class="mx im2">π</span>
+      <span class="mx im3">√</span>
+      <span class="mx im4">∫</span>
+      <span class="mx im5">×</span>
+      <span class="mx im6">÷</span>
+      <span class="mx im7">[ ]</span>
+      <span class="mx im8">x²</span>
+      <span class="mx im9">=</span>
+      <span class="mx im10">∞</span>
+    </div>
+
+    <div class="intro-conteudo">
+      <img src="img/olavo.png" alt="Foto do professor Olavo" class="intro-foto">
+      <p class="intro-eyebrow">Um projeto para</p>
+      <h1 class="intro-titulo">Prof. Olavo <span class="professor-apelido">Oladica's</span></h1>
+      <p class="intro-texto">
+        Uma calculadora de matrizes feita pra agilizar a correção e a preparação de exercícios —
+        soma, subtração, multiplicação, divisão e determinante, direto do celular ou do computador.
+      </p>
+      <button id="abrir-app-btn" type="button" class="btn btn-intro">Abrir calculadora →</button>
+      <p class="intro-credito">Feito pelo aluno Théo Furtado do COC de Itajaí.</p>
+    </div>
+  </div>
+
+  <div class="app" id="app-root">
     <header class="app-header">
       <button id="tema-toggle" class="tema-toggle" type="button" aria-label="Ativar modo escuro">🌙</button>
       <h1>Calculadora de Matrizes</h1>

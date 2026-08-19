@@ -22,12 +22,12 @@
     aplicarTema(temaAtual);
   });
 
-  // --- Animação no card do professor: flutua sozinha e reage ao mouse/toque ---
-  const professorCard = document.querySelector(".professor-card");
-
-  if (professorCard) {
-    const simbolos = Array.from(professorCard.querySelectorAll(".mx"));
-    const foto = professorCard.querySelector(".professor-foto");
+  // --- Fundo com símbolos matemáticos: flutuam sozinhos e reagem ao mouse/toque ---
+  function ativarFundoMatematico(container) {
+    if (!container) return;
+    const simbolos = Array.from(container.querySelectorAll(".mx"));
+    const foto = container.querySelector(".professor-foto, .intro-foto");
+    if (simbolos.length === 0) return;
 
     let pointerX = 0;
     let pointerY = 0;
@@ -58,7 +58,7 @@
     requestAnimationFrame(quadro);
 
     function atualizarPonteiro(clientX, clientY) {
-      const rect = professorCard.getBoundingClientRect();
+      const rect = container.getBoundingClientRect();
       pointerX = (clientX - rect.left) / rect.width - 0.5;
       pointerY = (clientY - rect.top) / rect.height - 0.5;
     }
@@ -68,11 +68,53 @@
       pointerY = 0;
     }
 
-    professorCard.addEventListener("pointermove", (e) => atualizarPonteiro(e.clientX, e.clientY));
-    professorCard.addEventListener("pointerleave", soltarPonteiro);
-    professorCard.addEventListener("pointerup", soltarPonteiro);
-    professorCard.addEventListener("pointercancel", soltarPonteiro);
+    container.addEventListener("pointermove", (e) => atualizarPonteiro(e.clientX, e.clientY));
+    container.addEventListener("pointerleave", soltarPonteiro);
+    container.addEventListener("pointerup", soltarPonteiro);
+    container.addEventListener("pointercancel", soltarPonteiro);
   }
+
+  ativarFundoMatematico(document.querySelector(".professor-card"));
+  ativarFundoMatematico(document.querySelector(".intro-screen"));
+
+  // --- Tela de abertura ---
+  const introScreen = document.getElementById("intro-screen");
+  const abrirAppBtn = document.getElementById("abrir-app-btn");
+
+  const elementosRevelaveis = [
+    document.querySelector(".app-header"),
+    document.querySelector(".professor-card"),
+    ...document.querySelectorAll("main > .card"),
+    document.getElementById("calcular-btn"),
+  ].filter(Boolean);
+
+  elementosRevelaveis.forEach((el, i) => {
+    el.classList.add("reveal");
+    el.style.transitionDelay = `${i * 70}ms`;
+  });
+
+  document.body.classList.add("intro-ativa");
+
+  let appAberto = false;
+
+  function abrirApp() {
+    if (appAberto) return;
+    appAberto = true;
+
+    introScreen.classList.add("intro-saindo");
+    document.body.classList.remove("intro-ativa");
+
+    elementosRevelaveis.forEach((el) => el.classList.add("is-visible"));
+
+    setTimeout(() => {
+      introScreen.hidden = true;
+    }, 420);
+  }
+
+  abrirAppBtn.addEventListener("click", abrirApp);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !appAberto) abrirApp();
+  });
 
   const operacaoSelect = document.getElementById("operacao");
   const modoOperandoField = document.getElementById("modo-operando-field");
@@ -385,6 +427,18 @@
 
   // --- Render ---
 
+  function reiniciarAnimacao(el, classe) {
+    el.classList.remove(classe);
+    void el.offsetWidth;
+    el.classList.add(classe);
+  }
+
+  function exibirResultado() {
+    resultadoSection.hidden = false;
+    reiniciarAnimacao(resultadoSection, "pop-in");
+    resultadoSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
   function mostrarResultadoMatriz(matriz) {
     resultadoConteudo.innerHTML = "";
     const wrap = document.createElement("div");
@@ -398,12 +452,15 @@
     const grid = document.createElement("div");
     grid.className = "matriz-grid resultado-grid";
     grid.style.setProperty("--cols", matriz[0].length);
+    let indice = 0;
     matriz.forEach((linha) => {
       linha.forEach((v) => {
         const cel = document.createElement("div");
         cel.className = "resultado-celula";
         cel.textContent = formatarNumero(v);
+        cel.style.animationDelay = `${indice * 25}ms`;
         grid.appendChild(cel);
+        indice++;
       });
     });
 
@@ -411,20 +468,34 @@
     wrap.appendChild(grid);
     wrap.appendChild(bracketDir);
     resultadoConteudo.appendChild(wrap);
-    resultadoSection.hidden = false;
-    resultadoSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    exibirResultado();
   }
 
   function mostrarResultadoEscalar(valor) {
-    resultadoConteudo.innerHTML = `<p class="resultado-escalar">${formatarNumero(valor)}</p>`;
-    resultadoSection.hidden = false;
-    resultadoSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    const alvo = arredondar(valor);
+    resultadoConteudo.innerHTML = `<p class="resultado-escalar" id="resultado-numero">0</p>`;
+    exibirResultado();
+
+    const elNumero = document.getElementById("resultado-numero");
+    const duracao = 550;
+    const inicioContagem = performance.now();
+
+    function passo(agora) {
+      const progresso = Math.min(1, (agora - inicioContagem) / duracao);
+      const facilitado = 1 - Math.pow(1 - progresso, 3);
+      elNumero.textContent = formatarNumero(alvo * facilitado);
+      if (progresso < 1) {
+        requestAnimationFrame(passo);
+      } else {
+        elNumero.textContent = formatarNumero(alvo);
+      }
+    }
+    requestAnimationFrame(passo);
   }
 
   function mostrarErro(mensagem) {
     resultadoConteudo.innerHTML = `<p class="erro-msg">${mensagem}</p>`;
-    resultadoSection.hidden = false;
-    resultadoSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    exibirResultado();
   }
 
   calcularBtn.addEventListener("click", () => {

@@ -65,6 +65,123 @@ body {
   padding: 20px 16px 48px;
 }
 
+body.intro-ativa {
+  overflow: hidden;
+}
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e1147, #3b1c73, #4f46e5);
+  background-size: 200% 200%;
+  animation: introGradiente 14s ease infinite, introFade 0.5s ease;
+}
+
+.intro-screen[hidden] {
+  display: none;
+}
+
+.intro-screen.intro-saindo {
+  opacity: 0;
+  transform: translateY(-24px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+@keyframes introGradiente {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes introFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.intro-math-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+  text-align: center;
+  color: #fff;
+  animation: introConteudoUp 0.6s ease 0.2s both;
+}
+
+@keyframes introConteudoUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.intro-foto {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 3px solid #fb923c;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+  margin-bottom: 14px;
+  transform: rotate(var(--tilt, 0deg)) scale(var(--zoom, 1));
+  transition: transform 0.2s ease-out;
+}
+
+.intro-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.intro-titulo {
+  margin: 6px 0 14px;
+  font-size: 1.7rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.intro-texto {
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.btn.btn-intro {
+  max-width: 280px;
+  margin: 0 auto;
+  background: #fb923c;
+  color: #3b1c73;
+}
+
+.btn.btn-intro:active {
+  background: #f97316;
+  transform: scale(0.98);
+}
+
+.intro-credito {
+  margin: 18px 0 0;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .app-header {
   position: relative;
   text-align: center;
@@ -104,6 +221,17 @@ body {
   transform: scale(0.88) rotate(-15deg);
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 .card {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -132,7 +260,7 @@ body {
   pointer-events: none;
 }
 
-.professor-math-bg .mx {
+.mx {
   position: absolute;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
@@ -144,14 +272,25 @@ body {
   will-change: transform;
 }
 
-.professor-math-bg .m1 { font-size: 2.6rem; top: -14px; left: 6px; --rot: -12deg; }
-.professor-math-bg .m2 { font-size: 2rem; top: 6px; right: 54px; --rot: 10deg; }
-.professor-math-bg .m3 { font-size: 2.1rem; bottom: -10px; left: 54px; --rot: 6deg; }
-.professor-math-bg .m4 { font-size: 2.3rem; bottom: 0; right: 8px; --rot: -10deg; }
-.professor-math-bg .m5 { font-size: 1.5rem; top: 46%; left: 2px; --rot: -4deg; }
-.professor-math-bg .m6 { font-size: 1.3rem; top: 14%; right: 22%; --rot: 12deg; }
-.professor-math-bg .m7 { font-size: 1.7rem; bottom: 20%; left: 32%; --rot: 0deg; }
-.professor-math-bg .m8 { font-size: 1.4rem; top: 2px; left: 42%; --rot: -6deg; }
+.m1 { font-size: 2.6rem; top: -14px; left: 6px; --rot: -12deg; }
+.m2 { font-size: 2rem; top: 6px; right: 54px; --rot: 10deg; }
+.m3 { font-size: 2.1rem; bottom: -10px; left: 54px; --rot: 6deg; }
+.m4 { font-size: 2.3rem; bottom: 0; right: 8px; --rot: -10deg; }
+.m5 { font-size: 1.5rem; top: 46%; left: 2px; --rot: -4deg; }
+.m6 { font-size: 1.3rem; top: 14%; right: 22%; --rot: 12deg; }
+.m7 { font-size: 1.7rem; bottom: 20%; left: 32%; --rot: 0deg; }
+.m8 { font-size: 1.4rem; top: 2px; left: 42%; --rot: -6deg; }
+
+.im1 { font-size: 3.4rem; top: 8%; left: 8%; --rot: -10deg; }
+.im2 { font-size: 2.6rem; top: 14%; right: 12%; --rot: 8deg; }
+.im3 { font-size: 3rem; bottom: 18%; left: 12%; --rot: 6deg; }
+.im4 { font-size: 3.2rem; bottom: 10%; right: 8%; --rot: -8deg; }
+.im5 { font-size: 2.2rem; top: 46%; left: 4%; --rot: -5deg; }
+.im6 { font-size: 2rem; top: 40%; right: 6%; --rot: 10deg; }
+.im7 { font-size: 2.4rem; bottom: 6%; left: 42%; --rot: 0deg; }
+.im8 { font-size: 2.1rem; top: 6%; left: 44%; --rot: -6deg; }
+.im9 { font-size: 2.6rem; bottom: 40%; right: 30%; --rot: 8deg; }
+.im10 { font-size: 3rem; top: 30%; left: 26%; --rot: -4deg; }
 
 .professor-foto {
   position: relative;
@@ -413,6 +552,16 @@ input[type="number"]:focus {
   background: var(--resultado-bg);
   border-radius: 8px;
   font-weight: 600;
+  opacity: 0;
+  transform: scale(0.85);
+  animation: celulaPop 0.3s ease-out forwards;
+}
+
+@keyframes celulaPop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .resultado-escalar {
@@ -421,6 +570,7 @@ input[type="number"]:focus {
   text-align: center;
   margin: 6px 0;
   color: var(--accent-text);
+  font-variant-numeric: tabular-nums;
 }
 
 .erro-msg {
@@ -430,6 +580,21 @@ input[type="number"]:focus {
   border-radius: 10px;
   margin: 0;
   font-size: 0.95rem;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.resultado-card.pop-in {
+  animation: popIn 0.3s ease-out;
 }
 
 .app-footer {
