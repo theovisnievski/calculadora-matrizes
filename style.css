@@ -65,14 +65,10 @@ body {
   padding: 20px 16px 48px;
 }
 
-body.intro-ativa {
-  overflow: hidden;
-}
-
 .intro-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;

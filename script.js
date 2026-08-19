@@ -80,6 +80,7 @@
   // --- Tela de abertura ---
   const introScreen = document.getElementById("intro-screen");
   const abrirAppBtn = document.getElementById("abrir-app-btn");
+  const appRoot = document.getElementById("app-root");
 
   const elementosRevelaveis = [
     document.querySelector(".app-header"),
@@ -93,8 +94,6 @@
     el.style.transitionDelay = `${i * 70}ms`;
   });
 
-  document.body.classList.add("intro-ativa");
-
   let appAberto = false;
 
   function abrirApp() {
@@ -102,13 +101,17 @@
     appAberto = true;
 
     introScreen.classList.add("intro-saindo");
-    document.body.classList.remove("intro-ativa");
-
-    elementosRevelaveis.forEach((el) => el.classList.add("is-visible"));
 
     setTimeout(() => {
       introScreen.hidden = true;
-    }, 420);
+      appRoot.hidden = false;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          elementosRevelaveis.forEach((el) => el.classList.add("is-visible"));
+        });
+      });
+    }, 400);
   }
 
   abrirAppBtn.addEventListener("click", abrirApp);
