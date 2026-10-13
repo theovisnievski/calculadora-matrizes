@@ -1,166 +1,212 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Calculadora de Matrizes</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calculadora de Matrizes · Prof. Olavo</title>
+  <meta name="description" content="Calculadora de matrizes com frações exatas e passo a passo: soma, produto, determinante (Sarrus e Laplace), inversa (Gauss-Jordan) e mais. Um projeto para o Prof. Olavo.">
+  <meta name="theme-color" content="#0d0818">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Calculadora de Matrizes · Prof. Olavo">
+  <meta property="og:description" content="Frações exatas e o passo a passo de cada conta, do jeito que se faz no caderno.">
+  <meta property="og:image" content="https://theovisnievski.github.io/calculadora-matrizes/img/olavo.png">
+  <meta property="og:url" content="https://theovisnievski.github.io/calculadora-matrizes/">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233a0d78'/%3E%3Cpath d='M20 14h-6v36h6M44 14h6v36h-6' fill='none' stroke='%23ff7a1a' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='24' fill='%23fff'%3EA%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
+  <link rel="stylesheet" href="style.css?v=11">
+
+  <script>
+    // Aplica o tema salvo antes de pintar a página (evita piscar).
+    (function () {
+      try {
+        var t = localStorage.getItem("tema");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
-  <div id="intro-screen" class="intro-screen">
-    <div class="intro-math-bg" aria-hidden="true">
-      <span class="mx im1">∑</span>
-      <span class="mx im2">π</span>
-      <span class="mx im3">√</span>
-      <span class="mx im4">∫</span>
-      <span class="mx im5">×</span>
-      <span class="mx im6">÷</span>
-      <span class="mx im7">[ ]</span>
-      <span class="mx im8">x²</span>
-      <span class="mx im9">=</span>
-      <span class="mx im10">∞</span>
-    </div>
 
-    <div class="intro-conteudo">
-      <img src="img/olavo.png" alt="Foto do professor Olavo" class="intro-foto">
-      <p class="intro-eyebrow">Um projeto para</p>
-      <h1 class="intro-titulo">Prof. Olavo <span class="professor-apelido">Oladica's</span></h1>
-      <p class="intro-texto">
-        Uma calculadora de matrizes feita pra agilizar a correção e a preparação de exercícios —
-        soma, subtração, multiplicação, divisão e determinante, direto do celular ou do computador.
-      </p>
-      <button id="abrir-app-btn" type="button" class="btn btn-intro">Abrir calculadora →</button>
-      <p class="intro-credito">Feito pelo aluno Théo Furtado do COC de Itajaí.</p>
-    </div>
-  </div>
+  <!-- ============ TELA DE ABERTURA ============ -->
+  <section id="intro" class="intro" aria-label="Apresentação">
+    <canvas class="intro-canvas" aria-hidden="true"></canvas>
+    <div class="intro-veu" aria-hidden="true"></div>
 
-  <div class="app" id="app-root" hidden>
-    <header class="app-header">
-      <button id="tema-toggle" class="tema-toggle" type="button" aria-label="Ativar modo escuro">🌙</button>
-      <h1>Calculadora de Matrizes</h1>
-      <p class="subtitle">Soma, subtração, multiplicação, divisão e determinante — sem precisar fazer na mão.</p>
+    <div class="intro-inner">
+      <div class="intro-texto">
+        <div class="intro-prof">
+          <img src="img/olavo.png" alt="Foto do professor Olavo" class="intro-prof-foto" width="72" height="72">
+          <div class="intro-prof-info">
+            <span class="intro-prof-rotulo">Um projeto para o</span>
+            <strong class="intro-prof-nome">Prof. Olavo</strong>
+          </div>
+          <span class="selo">Oladica's</span>
+        </div>
+
+        <h1 class="intro-titulo">Calculadora de <em>Matrizes</em></h1>
+
+        <p class="intro-lead">
+          Soma, produto, determinante, inversa e mais — com <strong>frações exatas</strong>
+          e o <strong>passo a passo</strong> de cada conta, do jeito que se faz no caderno.
+        </p>
+
+        <ul class="intro-recursos">
+          <li><span class="rec-icone" aria-hidden="true"><span class="fr"><span class="fr-n">1</span><span class="fr-d">3</span></span></span>Frações exatas, sem arredondar</li>
+          <li><span class="rec-icone" aria-hidden="true">Σ</span>Sarrus, Laplace e Gauss-Jordan</li>
+          <li><span class="rec-icone" aria-hidden="true">✓</span>Regras de cada operação verificadas</li>
+        </ul>
+
+        <div class="intro-acoes">
+          <button id="abrir-app" type="button" class="btn btn-laranja">
+            Abrir calculadora
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="intro-dica">ou aperte <kbd>Enter</kbd></span>
+        </div>
+
+        <p class="intro-credito">Feito pelo aluno <strong>Théo Furtado</strong> · COC Itajaí</p>
+      </div>
+
+      <div class="intro-palco" aria-hidden="true">
+        <div class="leitura">
+          <span class="leitura-titulo"><span class="ponto-vivo"></span>Transformação ao vivo</span>
+          <div class="leitura-eq">
+            <i>M</i> <span class="igual">=</span>
+            <span class="mtx mtx-colchetes leitura-mtx" style="--cols:2">
+              <span class="mtx-cel cor-i" data-m="0">1</span><span class="mtx-cel cor-j" data-m="1">0</span>
+              <span class="mtx-cel cor-i" data-m="2">0</span><span class="mtx-cel cor-j" data-m="3">1</span>
+            </span>
+          </div>
+          <div class="leitura-det">det <i>M</i> = <span id="leitura-det">1</span></div>
+          <p class="leitura-legenda">Toda matriz 2×2 transforma o plano: a coluna <b class="txt-i">laranja</b> é para onde vai <i>î</i>, a <b class="txt-j">lilás</b> é para onde vai <i>ĵ</i>. A área destacada vale <span class="var">|det <i>M</i>|</span>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APLICATIVO ============ -->
+  <div id="app" class="app" hidden>
+    <header class="topo">
+      <button type="button" class="marca" id="voltar-intro" aria-label="Voltar para a apresentação">
+        <span class="marca-logo" aria-hidden="true"><i>A</i></span>
+        <span class="marca-texto">
+          <strong>Calculadora de Matrizes</strong>
+          <span>frações exatas · passo a passo</span>
+        </span>
+      </button>
+      <div class="topo-dir">
+        <div class="prof-chip">
+          <img src="img/olavo.png" alt="" width="32" height="32">
+          <span class="prof-chip-nome">Prof. Olavo</span>
+          <span class="selo selo-pequeno">Oladica's</span>
+        </div>
+        <button type="button" class="icone-btn" id="tema" aria-label="Alternar tema">
+          <svg class="ic-sol" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="ic-lua" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </header>
 
-    <main>
-      <section class="professor-card">
-        <div class="professor-math-bg" aria-hidden="true">
-          <span class="mx m1">π</span>
-          <span class="mx m2">∑</span>
-          <span class="mx m3">√</span>
-          <span class="mx m4">∫</span>
-          <span class="mx m5">×</span>
-          <span class="mx m6">÷</span>
-          <span class="mx m7">[ ]</span>
-          <span class="mx m8">x²</span>
-        </div>
-        <img src="img/olavo.png" alt="Foto do professor Olavo" class="professor-foto">
-        <div class="professor-info">
-          <p class="professor-label">Criado para</p>
-          <h2 class="professor-nome">Prof. Olavo</h2>
-          <span class="professor-apelido">Oladica's</span>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2 class="card-title">Operação</h2>
-
-        <div class="field">
-          <label for="operacao">Operação</label>
-          <select id="operacao">
-            <option value="determinante" selected>Determinante</option>
-            <option value="soma">Soma (A + B)</option>
-            <option value="subtracao">Subtração (A − B)</option>
-            <option value="multiplicacao">Multiplicação</option>
-            <option value="divisao">Divisão</option>
-          </select>
-        </div>
-
-        <div class="field" id="modo-operando-field" hidden>
-          <label>Multiplicar/dividir por</label>
-          <div class="toggle-group" id="modo-operando">
-            <button type="button" class="toggle-btn active" data-modo="matriz">Outra matriz</button>
-            <button type="button" class="toggle-btn" data-modo="escalar">Um número (escalar)</button>
+    <main class="layout">
+      <section class="painel-ops reveal" aria-labelledby="ops-titulo">
+        <div class="painel-ops-topo">
+          <h2 class="rotulo" id="ops-titulo">Escolha a operação</h2>
+          <div class="painel-ops-acoes">
+            <button type="button" class="btn-texto" id="carregar-exemplo">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.3l-4.4 3.9 1.3 5.8L12 16l-4.9 3 1.3-5.8L4 9.3l5.8-.7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              Exemplo
+            </button>
+            <button type="button" class="btn-texto" id="trocar-ab">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 7h12l-3-3M17 17H5l3 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Trocar A ⇄ B
+            </button>
           </div>
         </div>
-
-        <div class="field" id="escalar-field" hidden>
-          <label for="escalar" id="escalar-label">Escalar</label>
-          <input type="number" id="escalar" value="2" step="any">
-        </div>
+        <div class="ops" id="ops" role="group" aria-label="Operações"></div>
       </section>
 
-      <section class="card">
-        <h2 class="card-title">Matriz A</h2>
+      <div class="colunas">
+        <div class="col-entrada" id="col-entrada">
+          <!-- Editores das matrizes A e B são montados pelo script.js -->
 
-        <div class="steppers-row">
-          <div class="stepper" id="a-linhas-stepper">
-            <span class="stepper-label" id="a-linhas-label">Linhas</span>
-            <div class="stepper-controls">
-              <button type="button" class="stepper-btn" data-stepper="a-linhas" data-delta="-1" aria-label="Diminuir linhas">−</button>
-              <span class="stepper-value" id="a-linhas-valor">3</span>
-              <button type="button" class="stepper-btn" data-stepper="a-linhas" data-delta="1" aria-label="Aumentar linhas">+</button>
+          <section class="cartao campo-extra reveal" id="campo-k" hidden>
+            <label class="extra-rotulo" for="entrada-k">Escalar <i class="var">k</i></label>
+            <div class="extra-linha">
+              <input id="entrada-k" class="entrada-extra" type="text" autocomplete="off" spellcheck="false" value="-3" aria-describedby="dica-k">
+              <p class="extra-dica" id="dica-k">Aceita frações: para “dividir” por 2, use <i>k</i> = 1/2.</p>
             </div>
-          </div>
-          <div class="stepper" id="a-colunas-stepper">
-            <span class="stepper-label">Colunas</span>
-            <div class="stepper-controls">
-              <button type="button" class="stepper-btn" data-stepper="a-colunas" data-delta="-1" aria-label="Diminuir colunas">−</button>
-              <span class="stepper-value" id="a-colunas-valor">3</span>
-              <button type="button" class="stepper-btn" data-stepper="a-colunas" data-delta="1" aria-label="Aumentar colunas">+</button>
+          </section>
+
+          <section class="cartao campo-extra reveal" id="campo-n" hidden>
+            <span class="extra-rotulo">Expoente <i class="var">n</i></span>
+            <div class="extra-linha">
+              <div class="stepper" data-stepper="potencia">
+                <div class="stepper-ctrl">
+                  <button type="button" data-delta="-1" aria-label="Diminuir expoente">−</button>
+                  <output id="valor-n">2</output>
+                  <button type="button" data-delta="1" aria-label="Aumentar expoente">+</button>
+                </div>
+              </div>
+              <p class="extra-dica">Aⁿ = A · A · … · A (n fatores). Por definição, A⁰ = I.</p>
             </div>
-          </div>
+          </section>
+
+          <button type="button" id="calcular" class="btn btn-primario reveal">
+            Calcular
+            <kbd class="atalho">Ctrl + Enter</kbd>
+          </button>
         </div>
 
-        <div class="matriz-wrap">
-          <div class="matriz-bracket matriz-bracket-left" aria-hidden="true"></div>
-          <div id="matriz-a" class="matriz-grid"></div>
-          <div class="matriz-bracket matriz-bracket-right" aria-hidden="true"></div>
-        </div>
-      </section>
-
-      <section class="card" id="matriz-b-bloco" hidden>
-        <h2 class="card-title">Matriz B</h2>
-
-        <div class="steppers-row">
-          <div class="stepper">
-            <span class="stepper-label">Linhas</span>
-            <div class="stepper-controls">
-              <button type="button" class="stepper-btn" data-stepper="b-linhas" data-delta="-1" aria-label="Diminuir linhas">−</button>
-              <span class="stepper-value" id="b-linhas-valor">3</span>
-              <button type="button" class="stepper-btn" data-stepper="b-linhas" data-delta="1" aria-label="Aumentar linhas">+</button>
+        <div class="col-saida">
+          <section class="cartao resultado reveal" id="resultado" aria-live="polite">
+            <header class="res-topo">
+              <h2 class="rotulo">Resultado</h2>
+              <div class="seg" role="group" aria-label="Formato dos números">
+                <button type="button" class="seg-btn ativo" data-formato="fracao" aria-pressed="true">Frações</button>
+                <button type="button" class="seg-btn" data-formato="decimal" aria-pressed="false">Decimais</button>
+              </div>
+            </header>
+            <div class="regra" id="regra"></div>
+            <div class="res-corpo" id="res-corpo"></div>
+            <div class="res-acoes" id="res-acoes">
+              <button type="button" class="btn-texto" id="copiar">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                <span>Copiar</span>
+              </button>
+              <button type="button" class="btn-texto" id="usar-como-a">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20 12H6m5-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Usar como A</span>
+              </button>
             </div>
-          </div>
-          <div class="stepper">
-            <span class="stepper-label">Colunas</span>
-            <div class="stepper-controls">
-              <button type="button" class="stepper-btn" data-stepper="b-colunas" data-delta="-1" aria-label="Diminuir colunas">−</button>
-              <span class="stepper-value" id="b-colunas-valor">3</span>
-              <button type="button" class="stepper-btn" data-stepper="b-colunas" data-delta="1" aria-label="Aumentar colunas">+</button>
-            </div>
-          </div>
+          </section>
+
+          <section class="cartao passos reveal" id="passos">
+            <header class="passos-topo">
+              <h2 class="rotulo">Passo a passo</h2>
+            </header>
+            <div id="passos-corpo"></div>
+          </section>
         </div>
-
-        <div class="matriz-wrap">
-          <div class="matriz-bracket matriz-bracket-left" aria-hidden="true"></div>
-          <div id="matriz-b" class="matriz-grid"></div>
-          <div class="matriz-bracket matriz-bracket-right" aria-hidden="true"></div>
-        </div>
-      </section>
-
-      <button id="calcular-btn" class="btn btn-primary">Calcular</button>
-
-      <section class="card resultado-card" id="resultado-section" hidden>
-        <h2 class="card-title">Resultado</h2>
-        <div id="resultado-conteudo"></div>
-      </section>
+      </div>
     </main>
 
-    <footer class="app-footer">
-      <p>Feito para facilitar a correção e a preparação de exercícios com matrizes.</p>
-      <p class="credito">Feito pelo aluno Théo Furtado do COC de Itajaí.</p>
+    <footer class="rodape">
+      <div class="rodape-linha">
+        <img src="img/olavo.png" alt="" width="40" height="40">
+        <p>Feito para o <strong>Prof. Olavo</strong> <span class="selo selo-pequeno">Oladica's</span> — para agilizar a correção e a preparação de exercícios com matrizes.</p>
+      </div>
+      <p class="rodape-credito">Feito pelo aluno <strong>Théo Furtado</strong> · COC Itajaí</p>
+      <p class="rodape-nota">Todas as contas usam aritmética racional exata: nenhum resultado é arredondado, a não ser que você peça os decimais.</p>
     </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script src="fracao.js?v=11"></script>
+  <script src="matrizes.js?v=11"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>
